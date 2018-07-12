@@ -13,7 +13,7 @@ def run(bot, update):
 	request.set_code('echo ' + str(update.message.text))
 	tio = Tio()
 	data = tio.send(request)
-	update.message.reply_text("*Input*: `{}`".format(str(update.message.text)) + "\n*Output*: `{}`".format(data.result))
+	update.message.reply_text("*Input*: `{}`".format(str(update.message.text)) + "\n*Output*: `{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
 	
 def j(bot, update, args):
 	
