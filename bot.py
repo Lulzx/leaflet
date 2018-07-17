@@ -6,14 +6,7 @@ from telegram import ParseMode
 from pytio import Tio, TioRequest
 	
 def start(bot, update):
-    update.message.reply_text("Hi, By default this bot is for J, use /j, /mathematica, /julia, /nim, /rust or /crystal followed with your code to run it.")
-
-def run(bot, update):
-	request = TioRequest(lang='j', code="")
-	request.set_code('echo ' + str(update.message.text))
-	tio = Tio()
-	data = tio.send(request)
-	update.message.reply_text("*Input*: `{}`".format(str(update.message.text)) + "\n*Output*: `{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
+    update.message.reply_text("Hi, Use /j, /mathematica, /julia, /nim, /rust or /crystal followed with your code to run it.")
 	
 def j(bot, update, args):
 	
@@ -22,7 +15,7 @@ def j(bot, update, args):
     request.set_code('echo ' + str(code))
     tio = Tio()
     data = tio.send(request)
-    update.message.reply_text("*Input*: `{}`".format(str(code)) + "\n\n*Output*: `{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
+    update.message.reply_text("*[J]*\n*Input*: `{}`".format(str(code)) + "\n\n*Output*: \n`{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
 	
 def mathematica(bot, update, args):
 	
@@ -67,14 +60,16 @@ def crystal(bot, update, args):
     request.set_code(str(code))
     tio = Tio()
     data = tio.send(request)
-    update.message.reply_text("*[Crystal]*\n*Input*: `{}`".format(str(code)) + "\n\n*Output*: `{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
-
+    if data.error:
+    	update.message.reply_text("*[Crystal]*\n*Input*: `{}`".format(str(code)) + "\n\n*Output*: `{}`".format(data.error), parse_mode=ParseMode.MARKDOWN)
+    else:
+    	update.message.reply_text("*[Crystal]*\n*Input*: `{}`".format(str(code)) + "\n\n*Output*: `{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
+    	
 def main():
     updater = Updater('TOKEN')
     dp = updater.dispatcher
     print ('BOT STARTED!')
     dp.add_handler(CommandHandler('start', start))
-    dp.add_handler(MessageHandler(Filters.text, run))
     dp.add_handler(CommandHandler('j', j, pass_args=True))
     dp.add_handler(CommandHandler('mathematica', mathematica, pass_args=True))
     dp.add_handler(CommandHandler('julia', julia, pass_args=True))
