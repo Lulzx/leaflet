@@ -6,7 +6,7 @@ from telegram import ParseMode
 from pytio import Tio, TioRequest
 	
 def start(bot, update):
-    update.message.reply_text("Hi, Use /j, /mathematica, /julia, /nim, /rust or /crystal followed with your code to run it.")
+    update.message.reply_text("Hi, Use /j, /mathematica, /julia, /nim, /elixir, /rust or /crystal followed with your code to run it.")
 	
 def j(bot, update, args):
 	
@@ -44,6 +44,15 @@ def nim(bot, update, args):
     data = tio.send(request)
     update.message.reply_text("*[Nim]*\n*Input*: `{}`".format(str(code)) + "\n\n*Output*: `{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
     
+def elixir(bot, update, args):
+	
+    code = " ".join(args)
+    request = TioRequest(lang='elixir', code="")
+    request.set_code(str(code))
+    tio = Tio()
+    data = tio.send(request)
+    update.message.reply_text("*[Elixir]*\n*Input*: `{}`".format(str(code)) + "\n\n*Output*: `{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
+
 def rust(bot, update, args):
 	
     code = " ".join(args)
@@ -66,7 +75,7 @@ def crystal(bot, update, args):
     	update.message.reply_text("*[Crystal]*\n*Input*: `{}`".format(str(code)) + "\n\n*Output*: `{}`".format(data.result), parse_mode=ParseMode.MARKDOWN)
     	
 def main():
-    updater = Updater('TOKEN')
+    updater = Updater('615050736:AAF2_gmzCle8abVSFSsZwz_C2wJrWnm4Cg4')
     dp = updater.dispatcher
     print ('BOT STARTED!')
     dp.add_handler(CommandHandler('start', start))
@@ -75,6 +84,7 @@ def main():
     dp.add_handler(CommandHandler('julia', julia, pass_args=True))
     dp.add_handler(CommandHandler('nim', nim, pass_args=True))
     dp.add_handler(CommandHandler('rust', rust, pass_args=True))
+    dp.add_handler(CommandHandler('elixir', elixir, pass_args=True))
     dp.add_handler(CommandHandler('crystal', crystal, pass_args=True))
     
     updater.start_polling()
